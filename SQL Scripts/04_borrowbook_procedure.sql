@@ -1,4 +1,3 @@
--- 4. STORED PROCEDURE: BorrowBook
 CREATE PROCEDURE BorrowBook
     @MemberID INT,
     @BookID INT,

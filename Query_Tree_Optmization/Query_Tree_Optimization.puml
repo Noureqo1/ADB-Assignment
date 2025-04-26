@@ -1,0 +1,108 @@
+@startuml Query_Optimization
+
+node "π Name, Title, Grade" as P1
+node "σ S.Major = 'Computer Science'" as S1
+node "σ C.Credits >= 3" as S2
+node "σ S.StudentID = E.StudentID" as S3
+node "σ C.CourseID = E.CourseID" as S4
+node "× Cartesian Product" as X1
+node "STUDENT" as ST1
+node "COURSE" as CO1
+node "ENROLLMENT" as EN1
+P1 --> S1
+S1 --> S2
+S2 --> S3
+S3 --> S4
+S4 --> X1
+X1 --> ST1
+X1 --> CO1
+X1 --> EN1
+note right of P1
+Step 1: Initial query tree (matches user-provided diagram)
+end note
+
+newpage
+
+node "π (Name, Title, Grade)" as P2
+node "σ (StudentID=E.StudentID, CourseID=E.CourseID)" as S5
+node "σ (Major='CS')" as S6
+node "STUDENT" as ST2
+node "σ (Credits>=3)" as S7
+node "COURSE" as CO2
+node "ENROLLMENT" as EN2
+P2 --> S5
+S5 --> S6
+S6 --> ST2
+S5 --> S7
+S7 --> CO2
+S5 --> EN2
+note right of P2
+Step 2: Push selections to base relations
+end note
+
+newpage
+
+node "π (Name, Title, Grade)" as P3
+node "σ (StudentID=E.StudentID, CourseID=E.CourseID)" as S8
+node "σ (Major='CS')" as S9
+node "STUDENT" as ST3
+node "σ (Credits>=3)" as S10
+node "COURSE" as CO3
+node "ENROLLMENT" as EN3
+P3 --> S8
+S8 --> S9
+S9 --> ST3
+S8 --> S10
+S10 --> CO3
+S8 --> EN3
+note right of P3
+Step 3: Apply most selective conditions first
+end note
+
+newpage
+
+node "π (Name, Title, Grade)" as P4
+node "⋈ (StudentID=E.StudentID)" as J1
+node "⋈ (CourseID=E.CourseID)" as J2
+node "σ (Major='CS')" as S11
+node "STUDENT" as ST4
+node "ENROLLMENT" as EN4
+node "σ (Credits>=3)" as S12
+node "COURSE" as CO4
+P4 --> J1
+J1 --> S11
+S11 --> ST4
+J1 --> J2
+J2 --> EN4
+J2 --> S12
+S12 --> CO4
+note right of P4
+Step 4: Use joins instead of cross product + selection
+end note
+
+newpage
+
+node "π (Name, Title, Grade)" as P5
+node "⋈ (StudentID=E.StudentID)" as J3
+node "⋈ (CourseID=E.CourseID)" as J4
+node "σ (Major='CS')" as S13
+node "π (StudentID, Name)" as Proj1
+node "STUDENT" as ST5
+node "ENROLLMENT" as EN5
+node "σ (Credits>=3)" as S14
+node "π (CourseID, Title, Credits)" as Proj2
+node "COURSE" as CO5
+P5 --> J3
+J3 --> S13
+S13 --> Proj1
+Proj1 --> ST5
+J3 --> J4
+J4 --> EN5
+J4 --> S14
+S14 --> Proj2
+Proj2 --> CO5
+note right of P5
+Step 5: Push projections to reduce columns early
+end note
+
+@enduml
