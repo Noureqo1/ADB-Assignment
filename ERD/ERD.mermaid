@@ -1,0 +1,29 @@
+erDiagram
+    BOOKS --o{ BORROWEDBOOKS : "is borrowed as"
+    MEMBERS --o{ BORROWEDBOOKS : "borrows"
+
+    BOOKS {
+        int BookID PK
+        string Title
+        string Author
+        int CopiesAvailable
+        int TotalCopies
+    }
+
+    MEMBERS {
+        int MemberID PK
+        string Name
+        string Email
+        int TotalBooksBorrowed
+        boolean IsActive
+    }
+
+    BORROWEDBOOKS {
+        int BorrowID PK
+        int MemberID FK
+        int BookID FK
+        date BorrowDate
+        date DueDate
+        date ReturnDate
+        boolean IsReturned
+    }
