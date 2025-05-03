@@ -69,7 +69,7 @@ The system consists of three main tables:
 1. Triger and Prevent Borrow.
 ![trigers](Tests/Screenshot%202025-04-26%20195907.png)
 - Two failed attempts.
-- Three successful attempt.
+- Three successful attempts.
   
 2. Borrowed_Books after running the procedures.
     ![borrow_book](Tests/Screenshot%202025-04-26%20200055.png)
